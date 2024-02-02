@@ -28,7 +28,7 @@ class ProjectCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Project::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/project');
-        CRUD::setEntityNameStrings('project', 'projects');
+        CRUD::setEntityNameStrings('проект', 'проекты');
     }
 
     /**
@@ -39,12 +39,22 @@ class ProjectCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->addColumns([
+            [
+                'name'      => 'title',
+                'label'     => 'Заголовок',
+            ],
+            [
+                'name'  => 'description',
+                'label' => 'Описание',
+                'type'  => 'textarea'
+            ]
+        ]);
+    }
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 
     /**
@@ -56,12 +66,17 @@ class ProjectCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ProjectRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        
+        $this->crud->addField([
+            'name'      => 'title',
+            'label'     => 'Заголовок',
+        ]);
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->addField([
+            'name'  => 'description',
+            'label' => 'Описание',
+            'type'  => 'textarea'
+        ]);
     }
 
     /**

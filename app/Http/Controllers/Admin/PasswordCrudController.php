@@ -28,7 +28,7 @@ class PasswordCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Password::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/password');
-        CRUD::setEntityNameStrings('Пароль', 'Пароли');
+        CRUD::setEntityNameStrings('пароль', 'пароли');
     }
 
     /**
@@ -39,12 +39,37 @@ class PasswordCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->addColumns([
+            [
+                'name'      => 'title',
+                'label'     => 'Заголовок',
+            ],
+            [
+                'name'      => 'username',
+                'label'     => 'Имя пользователя',
+            ],
+            [
+                'name'  => 'password',
+                'label' => 'Пароль',
+                'type'  => 'text'
+            ],
+            [
+                'name'  => 'description',
+                'label' => 'Описание',
+                'type'  => 'textarea'
+            ]
+        ]);
+    }
 
         /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+     * Define what happens when the List operation is loaded.
+     * 
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 
     /**
