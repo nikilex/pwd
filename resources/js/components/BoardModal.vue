@@ -144,13 +144,9 @@ export default {
 
     watch: {
         'card.id': {
-            handler: async function () {
+            handler: function () {
                 if (this.card.id) {
-                    this.loadingCard = true
-                    await this.getBoards()
-                    await this.getCard()
-                    await this.getColumns()
-                    this.loadingCard = false
+                    this.loadCard()
                 }
             },
         },
@@ -159,6 +155,14 @@ export default {
     mounted() {},
 
     methods: {
+        async loadCard() {
+            this.loadingCard = true
+            await this.getBoards()
+            await this.getCard()
+            await this.getColumns()
+            this.loadingCard = false
+        },
+
         getBoards() {
             return axios.get('/get-boards').then((res) => {
                 this.boards = res.data
@@ -244,6 +248,8 @@ export default {
             })
 
             myModal.show()
+
+            this.loadCard()
         },
 
         saveDescription() {
