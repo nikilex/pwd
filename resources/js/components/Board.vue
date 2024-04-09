@@ -151,7 +151,9 @@ export default {
 
     computed: {
         realColumnsMoreThanWithEmptyColumn() {
-            return this.columns.length > this.columns.filter((item) => item.id).length
+            if(this.columns) {
+                return this.columns.length > this.columns.filter((item) => item.id).length
+            }
         },
     },
 
@@ -241,15 +243,15 @@ export default {
         },
 
         removeEmptyCards() {
-            this.columns = this.columns.forEach((item) => {
+            this.columns = this.columns.map((item) => {
                 item.cards = item.cards.filter((itemCard) => itemCard.id)
                 return item
             })
         },
 
         outsideTitle(event) {
-            this.addTitleEdit()
-            this.removeEmptyColumn()
+           this.addTitleEdit()
+           this.removeEmptyColumn()
         },
 
         outsideCardTitle(event) {
