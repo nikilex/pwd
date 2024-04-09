@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Api\BoardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/admin', [DashboardController::class, 'index'])->name('main');
+
+Route::get('/get-boards', [BoardController::class, 'getBoards']);
+Route::get('/get-columns', [BoardController::class, 'getColumns']);
+
+Route::put('/transfer-card', [BoardController::class, 'transferCard']);

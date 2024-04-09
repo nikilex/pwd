@@ -19,4 +19,9 @@ Route::group([
     Route::crud('password', 'PasswordCrudController');
     Route::crud('project', 'ProjectCrudController');
     Route::crud('user', 'UserCrudController');
+    Route::get('b/{id}', 'BoardController@index')->name('page.board.id.index');
+    Route::get('b', 'BoardController@index')->name('page.board.index');
+    Route::crud('board', 'BoardCrudController');
+    Route::crud('column', 'ColumnCrudController');
+    Route::crud('card', 'CardCrudController');
 }); // this should be the absolute last line of this file
