@@ -43,7 +43,7 @@ class BoardCrudController extends CrudController
         $this->crud->addColumn([
             'name'      => 'title',
             'label'     => 'Заголовок',
-            'linkTo' => fn($entry, $related_key) => route('page.board.id.index', ['id' => $entry->id]),
+            'linkTo' => fn ($entry, $related_key) => route('page.board.id.index', ['id' => $entry->id]),
         ]);
 
         $this->crud->addColumn([
@@ -70,7 +70,7 @@ class BoardCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(BoardRequest::class);
-       // CRUD::setFromDb(); // set fields from db columns.
+        // CRUD::setFromDb(); // set fields from db columns.
 
         $this->crud->addField([
             'name'      => 'title',
