@@ -15,9 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/admin', [DashboardController::class, 'index'])->name('main');
+Route::group([
+    'middleware' => array_merge(
+        (array) config('backpack.base.web_middleware', 'web'),
+        (array) config('backpack.base.middleware_key', 'admin')
+    ),
+], function () { // custom admin routes
+    Route::get('/admin', [DashboardController::class, 'index'])->name('main');
 
-Route::get('/get-boards', [BoardController::class, 'getBoards']);
-Route::get('/get-columns', [BoardController::class, 'getColumns']);
+    Route::get('/get-boards', [BoardController::class, 'getBoards']);
+    Route::get('/get-columns', [BoardController::class, 'getColumns']);
 
-Route::put('/transfer-card', [BoardController::class, 'transferCard']);
+    Route::put('/transfer-card', [BoardController::class, 'transferCard']);
+});
