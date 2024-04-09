@@ -20,7 +20,7 @@ class DashboardController extends Controller
         if($request->has('id')) {
             $board = Board::where('id', $request->get('id'))->first();
         } else {
-            $board = Board::latest()->first();
+            $board = Board::where('user_id', backpack_user()->id)->latest()->first();
         }
 
         return view('admin.board', [
