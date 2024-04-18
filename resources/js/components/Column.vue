@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row column__cards-wrapper">
                 <div class="col-12">
                     <div class="cards-wrapper">
                         <div class="row gap-1">
