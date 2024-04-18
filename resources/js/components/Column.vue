@@ -1,7 +1,7 @@
 <template>
     <div class="column board-column h-auto bg-secondary p-3 rounded">
         <div class="column__wrapper">
-            <div class="row g-0">
+            <div class="row g-0 flex-nowrap">
                 <div class="col-auto column__draggable me-1" style="cursor: pointer">
                     <i class="las la-bars"></i>
                 </div>
