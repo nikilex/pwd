@@ -4,9 +4,7 @@
 
 <div class="jumbotron" id="app">
 @if($board)
-    <h1 class="mb-4">{{ $board->title }}</h1>
-
-    <Board board-id="{{ $board->id }}" />
+    <Board :board="{{ $board }}" />
 @else
     <h5>Досок пока нет</h5>
 @endif

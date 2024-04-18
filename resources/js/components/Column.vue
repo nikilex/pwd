@@ -1,11 +1,11 @@
 <template>
     <div class="column board-column h-auto bg-secondary p-3 rounded">
         <div class="column__wrapper">
-            <div class="d-flex">
-                <div class="column__draggable me-1" style="cursor: pointer">
+            <div class="row g-0">
+                <div class="col-auto column__draggable me-1" style="cursor: pointer">
                     <i class="las la-bars"></i>
                 </div>
-                <div class="column__header mb-3">
+                <div class="col-auto column__header mb-2">
                     <h3 v-if="!localColumn.titleEdit" @click="editTitle()">
                         {{ localColumn.title }}
                     </h3>
@@ -43,7 +43,7 @@
                     <div class="cards-wrapper">
                         <div class="row gap-1">
                             <draggable
-                                @change="log($event, localColumn.id)"
+                                @change="cardOrderChange($event, localColumn.id)"
                                 :list="localColumn.cards"
                                 handle=".card__draggable"
                                 group="people"
@@ -120,7 +120,7 @@ export default {
     },
 
     methods: {
-        log(e, columnId) {
+        cardOrderChange(e, columnId) {
             this.localColumn.cards.forEach((item, index) => {
                 item.sort = index
                 item.column_id = columnId

@@ -1,14 +1,24 @@
 <template>
     <div class="container">
-        <div class="row flex-nowrap gap-3 g-0 overflow-scroll">
-            <div
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                <h1 class="mb-4">{{ board.title }}</h1>
+            </div>
+            <div class="col-auto">
+                <h3 v-if="!realColumnsMoreThanWithEmptyColumn" class="mb-3">
+                    <button @click="addColumn" class="btn btn-link text-light">+ Добавить колонку</button>
+                </h3>
+            </div>
+        </div>
+        <div class="row flex-nowrap gap-3 g-0 overflow-scroll g-0">
+            <!-- <div
                 v-for="(column, columnIndex) in columns"
                 class="col-auto"
                 :key="columnIndex"
-            >
-            <!-- <draggable
-                @change="log"
-                :list="columns"
+            > -->
+            <draggable
+                v-model="columns"
+                @change="columnOrderChange"
                 handle=".column__draggable"
                 group="people"
                 item-key="id"
@@ -16,26 +26,27 @@
                 @start="drag = true"
                 @end="drag = false"
             >
-                <template #item="{ element }"> -->
-                    <!-- <div class="col-auto"> -->
+                <template #item="{ element }">
+                    <!-- <Column
+                            @changeCard="changeCard"
+                            @removeEmptyColumn="removeEmptyColumn"
+                            :board-id="board.id"
+                            :column="column"
+                        /> -->
+                    <div class="col-auto">
                         <Column
                             @changeCard="changeCard"
                             @removeEmptyColumn="removeEmptyColumn"
-                            :board-id="boardId"
-                            :column="column"
+                            :board-id="board.id"
+                            :column="element"
                         />
-                    <!-- </div> -->
-                <!-- </template>
-            </draggable> -->
-            </div>
-            <div class="col" v-if="!realColumnsMoreThanWithEmptyColumn">
-                <h3 class="mb-3">
-                    <button @click="addColumn" class="btn btn-link text-light">+ Добавить колонку</button>
-                </h3>
-            </div>
+                    </div>
+                </template>
+            </draggable>
+            <!-- </div> -->
         </div>
 
-        <BoardModal @title-edited="modalTitleEdited" @cardTransfered="cardTransfered" :board-id="boardId" ref="modal" />
+        <BoardModal @title-edited="modalTitleEdited" @cardTransfered="cardTransfered" :board-id="board.id" ref="modal" />
     </div>
 </template>
 
@@ -54,8 +65,8 @@ export default {
     },
 
     props: {
-        boardId: {
-            type: String,
+        board: {
+            type: Object,
             required: true,
         },
     },
@@ -80,29 +91,27 @@ export default {
     },
 
     created() {
-        if (this.boardId) {
+        if (this.board.id) {
             this.getColumns()
         }
     },
 
     methods: {
-        log(e) {
-            console.log(e)
+        columnOrderChange(e) {
+            this.columns.forEach((item, index) => {
+                item.sort = index
+            })
+
+            axios.put('/update-column-sort', {
+                columns: this.columns.map((a) => {
+                    return { id: a.id, sort: a.sort }
+                }),
+            })
         },
 
-        handleChange() {
-            console.log('changed')
-        },
-        inputChanged(value) {
-            colnsole.log(value)
-            this.activeNames = value
-        },
         getComponentData() {
             return {
-                onChange: this.handleChange,
-                onInput: this.inputChanged,
                 class: 'row col-auto flex-nowrap gap-3 overflow-scroll',
-                value: this.activeNames,
             }
         },
 
@@ -132,7 +141,7 @@ export default {
             axios
                 .get(`/get-columns`, {
                     params: {
-                        id: this.boardId,
+                        id: this.board.id,
                     },
                 })
                 .then((res) => {

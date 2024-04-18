@@ -29,4 +29,5 @@ Route::group([
     Route::put('/transfer-card', [BoardController::class, 'transferCard']);
 
     Route::put('/update-card-sort', [BoardController::class, 'updateSort']);
+    Route::put('/update-column-sort', [BoardController::class, 'updateColumnSort']);
 });

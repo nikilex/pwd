@@ -96,4 +96,9 @@ class BoardController extends Controller
     {
         return Card::upsert($request->cards, ['id'], ['sort', 'column_id']);
     }
+
+    public function updateColumnSort(Request $request)
+    {
+        return Column::upsert($request->columns, ['id'], ['sort']);
+    }
 }
