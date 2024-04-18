@@ -1,7 +1,7 @@
 <template>
     <div class="card mb-2">
         <div class="card-body p-2 d-flex align-items-center">
-            <div class="card__draggable me-1" style="cursor: pointer">
+            <div class="card__draggable me-1 align-self-start" style="cursor: pointer">
                 <i class="las la-bars"></i>
             </div>
             <div class="card__content w-100">
