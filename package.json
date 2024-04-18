@@ -19,6 +19,8 @@
     "dependencies": {
         "click-outside-vue3": "^4.0.1",
         "jquery": "^3.7.1",
-        "vue3-select2-component": "^0.1.7"
+        "lodash": "^4.17.21",
+        "vue3-select2-component": "^0.1.7",
+        "vuedraggable": "^4.1.0"
     }
 }

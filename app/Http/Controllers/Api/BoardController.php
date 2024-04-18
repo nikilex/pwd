@@ -23,7 +23,13 @@ class BoardController extends Controller
     {
         $columns = Column::where([
             'board_id' => $request->id,
-        ])->with('cards')->get();
+        ])
+            ->orderBy('sort', 'ASC')
+            ->with(['cards' => function ($q) {
+                $q->orderBy('sort', 'ASC');
+            }])
+            ->get();
+
         return response()->json($columns);
     }
 
@@ -58,9 +64,9 @@ class BoardController extends Controller
     public function changeColumnTitle(Request $request)
     {
         return Column::updateOrCreate([
-            'id' => $request->get('columns')['id'] ?? null,
+            'id' => $request->get('column')['id'] ?? null,
         ], [
-            'title'    => $request->get('columns')['title'],
+            'title'    => $request->get('column')['title'],
             'board_id' => $request->get('board_id'),
         ]);
     }
@@ -82,7 +88,12 @@ class BoardController extends Controller
         ]);
 
         $card = Card::find($request->card_id);
-        
+
         return $card;
+    }
+
+    public function updateSort(Request $request)
+    {
+        return Card::upsert($request->cards, ['id'], ['sort', 'column_id']);
     }
 }
