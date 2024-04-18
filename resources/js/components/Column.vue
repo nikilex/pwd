@@ -1,5 +1,5 @@
 <template>
-    <div class="column board-column h-100 bg-secondary p-3 rounded">
+    <div class="column board-column h-auto bg-secondary p-3 rounded">
         <div class="column__wrapper">
             <div class="d-flex">
                 <div class="column__draggable me-1" style="cursor: pointer">
