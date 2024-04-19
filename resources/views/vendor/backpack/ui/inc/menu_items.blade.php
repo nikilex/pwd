@@ -5,6 +5,7 @@
 
 <x-backpack::menu-item title="Пароли" icon="las la-key" :link="backpack_url('password')" />
 <x-backpack::menu-item title="Пользователи" icon="las la-user" :link="backpack_url('user')" />
+<x-backpack::menu-item title="Выход" icon="las la-sign-out-alt" :link="backpack_url('logout')" />
 <!-- <x-backpack::menu-item title="Page Canban" icon="la la-question" :link="backpack_url('page_canban')" /> -->
 
 <!-- <x-backpack::menu-item title="Columns" icon="la la-question" :link="backpack_url('column')" />
