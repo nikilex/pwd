@@ -40,6 +40,7 @@
                             @removeEmptyColumn="removeEmptyColumn"
                             @cardDraggableStart="cardDraggableStart"
                             @cardDraggableEnd="cardDraggableEnd"
+                            @localColumnChanged="localColumnChanged"
                             :board-id="board.id"
                             :column="element"
                             :card-drag-disabled="cardDraggableDisabled"
@@ -108,6 +109,11 @@ export default {
     },
 
     methods: {
+        localColumnChanged(val) {
+            let index = this.columns.findIndex((item) => item.uuid === val.uuid)
+            this.columns[index] = val
+        },
+
         cardDraggableStart() {
             this.columnDragabbleDisabled = true
         },
@@ -146,6 +152,7 @@ export default {
 
         addColumn() {
             this.columns.push({
+                uuid: Symbol('id'),
                 title: '',
                 titleEdit: true,
                 cards: [],
@@ -176,8 +183,10 @@ export default {
                 .then((res) => {
                     this.columns = res.data.map((column) => {
                         column.titleEdit = false
+                        column.uuid = Symbol("id")
 
                         column.cards = column.cards.map((card) => {
+                            card.uuid = Symbol("id")
                             card.titleEdit = false
                             return card
                         })

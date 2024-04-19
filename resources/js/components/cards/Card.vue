@@ -66,6 +66,15 @@ export default {
         }
     },
 
+    watch: {
+        localCard: {
+            handler: function (value) {
+                this.$emit('localCardChanged', value)
+            },
+            deep: true,
+        },
+    },
+
     data() {
         return {
             localCard: {

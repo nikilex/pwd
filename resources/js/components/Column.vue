@@ -56,6 +56,7 @@
                                     <Card
                                         @changeCard="changeCard"
                                         @removeEmptyCards="removeEmptyCards"
+                                        @localCardChanged="localCardChanged"
                                         :card="element"
                                         :column-id="localColumn.id"
                                     />
@@ -107,6 +108,15 @@ export default {
         }
     },
 
+    watch: {
+        localColumn: {
+            handler: function (value) {
+                this.$emit('localColumnChanged', value)
+            },
+            deep: true,
+        },
+    },
+
     data() {
         return {
             localColumn: {
@@ -127,6 +137,11 @@ export default {
     },
 
     methods: {
+        localCardChanged(val) {
+            let index = this.localColumn.cards.findIndex((item) => item.uuid === val.uuid)
+            this.localColumn.cards[index] = val
+        },
+
         cardDraggableStart() {
             this.drag = true
             this.$emit('cardDraggableStart')
@@ -152,6 +167,7 @@ export default {
 
         addCard() {
             this.localColumn.cards.push({
+                uuid: Symbol('id'),
                 title: '',
                 titleEdit: true,
             })
