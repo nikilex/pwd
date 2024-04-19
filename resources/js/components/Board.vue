@@ -5,7 +5,7 @@
                 <h1 class="mb-4">{{ board.title }}</h1>
             </div>
             <div class="col-auto">
-                <h3 v-if="!realColumnsMoreThanWithEmptyColumn" class="mb-3">
+                <h3 class="mb-3">
                     <button @click="addColumn" class="btn btn-link text-light">+ Добавить колонку</button>
                 </h3>
             </div>
@@ -19,12 +19,13 @@
             <draggable
                 v-model="columns"
                 @change="columnOrderChange"
+                @start="columnDraggableStart"
+                @end="columnDraggableEnd"
+                :component-data="getComponentData()"
+                :disabled="columnDragabbleDisabled"
                 handle=".column__draggable"
                 group="people"
                 item-key="id"
-                :component-data="getComponentData()"
-                @start="drag = true"
-                @end="drag = false"
             >
                 <template #item="{ element }">
                     <!-- <Column
@@ -37,8 +38,11 @@
                         <Column
                             @changeCard="changeCard"
                             @removeEmptyColumn="removeEmptyColumn"
+                            @cardDraggableStart="cardDraggableStart"
+                            @cardDraggableEnd="cardDraggableEnd"
                             :board-id="board.id"
                             :column="element"
+                            :card-drag-disabled="cardDraggableDisabled"
                         />
                     </div>
                 </template>
@@ -46,7 +50,12 @@
             <!-- </div> -->
         </div>
 
-        <BoardModal @title-edited="modalTitleEdited" @cardTransfered="cardTransfered" :board-id="board.id" ref="modal" />
+        <BoardModal
+            @title-edited="modalTitleEdited"
+            @cardTransfered="cardTransfered"
+            :board-id="board.id"
+            ref="modal"
+        />
     </div>
 </template>
 
@@ -79,13 +88,15 @@ export default {
             loadingChangeCardTitle: false,
             drag: false,
             activeNames: null,
+            columnDragabbleDisabled: false,
+            cardDraggableDisabled: false,
         }
     },
 
     computed: {
         realColumnsMoreThanWithEmptyColumn() {
             if (this.columns) {
-                return this.columns.length > this.columns.filter((item) => item.id).length
+                return this.columns.length && this.columns.length > this.columns.filter((item) => item.id).length
             }
         },
     },
@@ -97,6 +108,24 @@ export default {
     },
 
     methods: {
+        cardDraggableStart() {
+            this.columnDragabbleDisabled = true
+        },
+
+        cardDraggableEnd() {
+            this.columnDragabbleDisabled = false
+        },
+
+        columnDraggableStart() {
+            this.drag = true
+            this.cardDraggableDisabled = true
+        },
+
+        columnDraggableEnd() {
+            this.drag = false
+            this.cardDraggableDisabled = false
+        },
+
         columnOrderChange(e) {
             this.columns.forEach((item, index) => {
                 item.sort = index

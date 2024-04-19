@@ -5,7 +5,7 @@
                 <div class="col-auto column__draggable me-1" style="cursor: pointer">
                     <i class="las la-bars"></i>
                 </div>
-                <div class="col-auto column__header mb-2">
+                <div class="col column__header mb-2">
                     <h3 v-if="!localColumn.titleEdit" @click="editTitle()">
                         {{ localColumn.title }}
                     </h3>
@@ -19,7 +19,7 @@
 
                         <button
                             @click="changeColumnTitle()"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary p-2 me-1"
                             type="button"
                             :disabled="loadingChangeColumnTitle || !localColumn.title"
                         >
@@ -32,7 +32,7 @@
                             </div>
                             <i v-else class="la la-check nav-icon" />
                         </button>
-                        <button @click="outsideTitle" class="btn btn-outline-danger" type="button">
+                        <button @click="outsideTitle" class="btn btn-outline-danger p-2" type="button">
                             <i class="la la-close nav-icon" />
                         </button>
                     </div>
@@ -44,12 +44,13 @@
                         <div class="row gap-1">
                             <draggable
                                 @change="cardOrderChange($event, localColumn.id)"
+                                @start="cardDraggableStart"
+                                @end="cardDraggableEnd"
                                 :list="localColumn.cards"
+                                :disabled="cardDragDisabled"
                                 handle=".card__draggable"
                                 group="people"
                                 item-key="id"
-                                @start="drag = true"
-                                @end="drag = false"
                             >
                                 <template #item="{ element }">
                                     <Card
@@ -98,6 +99,12 @@ export default {
             type: Object,
             required: true,
         },
+
+        cardDragDisabled: {
+            type: Boolean,
+            required: false,
+            default: false,
+        }
     },
 
     data() {
@@ -120,6 +127,16 @@ export default {
     },
 
     methods: {
+        cardDraggableStart() {
+            this.drag = true
+            this.$emit('cardDraggableStart')
+        },
+
+        cardDraggableEnd() {
+            this.drag = false
+            this.$emit('cardDraggableEnd')
+        },
+
         cardOrderChange(e, columnId) {
             this.localColumn.cards.forEach((item, index) => {
                 item.sort = index

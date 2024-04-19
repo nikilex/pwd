@@ -48,18 +48,22 @@
                             @click="editDescription"
                             class="card__description border border-secondary p-2 rounded"
                         >
-                            <div class="border">
-                                <p>{{ card.description }}</p>
-                            </div>
+                            <div class="border" v-html="card.description" />
                         </div>
                         <div v-else class="row" v-click-outside="closeEditDescription">
                             <div class="col-12">
-                                <textarea
+                                <ckeditor
+                                    v-model="editorText"
+                                    @ready="onReady"
+                                    @input="onChange"
+                                    :editor="editor"
+                                ></ckeditor>
+                                <!-- <textarea
                                     v-model="card.description"
                                     class="form-control"
                                     placeholder="Добавьте описание"
                                     rows="3"
-                                ></textarea>
+                                ></textarea> -->
                             </div>
 
                             <div class="col-12 d-flex justify-content-end mt-2">
@@ -111,8 +115,16 @@
 </template>
 
 <script>
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import CKEditor from '@ckeditor/ckeditor5-vue'
+import CKEditorInspector from '@ckeditor/ckeditor5-inspector'
+
 export default {
     name: 'BoardModal',
+
+    components: {
+        ckeditor: CKEditor.component,
+    },
 
     props: {
         boardId: {
@@ -129,6 +141,8 @@ export default {
                 titleEdit: false,
                 description: '',
             },
+            editor: ClassicEditor,
+            editorText: '',
             isEditableDescription: false,
             loadingSaveDescription: false,
             loadingSaveTitle: false,
@@ -163,6 +177,11 @@ export default {
             this.loadingCard = false
         },
 
+        onReady(editor) {
+            CKEditorInspector.attach(editor)
+        },
+        onChange(data) {},
+
         getBoards() {
             return axios.get('/get-boards').then((res) => {
                 this.boards = res.data
@@ -191,6 +210,7 @@ export default {
                 })
                 .then((res) => {
                     this.card = { ...this.card, ...res.data }
+                    this.editorText = this.card.description
                 })
         },
 
@@ -256,8 +276,9 @@ export default {
             this.loadingSaveDescription = true
 
             axios
-                .put(`/api/save-card-description/${this.card.id}`, { description: this.card.description })
+                .put(`/api/save-card-description/${this.card.id}`, { description: this.editorText })
                 .then(() => {
+                    this.card.description = this.editorText
                     this.isEditableDescription = false
                 })
                 .finally(() => {
@@ -299,3 +320,9 @@ export default {
     },
 }
 </script>
+
+<style> /* don't add "scoped"; note that this will also globalize the CSS for all editors in your project */
+    .ck-editor__editable {
+        min-height: 150px;
+    }
+</style>
