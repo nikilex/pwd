@@ -20,6 +20,6 @@
 }
 
 .column__cards-wrapper {
-    max-height: 100vh;
+    max-height: 80vh;
     overflow: scroll;
 }

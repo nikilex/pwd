@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="jumbotron" id="app">
+<div class="jumbotron pb-5" id="app">
 @if($board)
     <Board :board="{{ $board }}" />
 @else
