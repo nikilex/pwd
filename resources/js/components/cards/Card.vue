@@ -1,6 +1,6 @@
 <template>
-    <div class="card mb-2">
-        <div class="card-body p-2 d-flex align-items-center">
+    <div class="card card-main">
+        <div class="card-body card-main__body d-flex align-items-center">
             <div class="card__draggable me-1 align-self-start" style="cursor: pointer">
                 <i class="las la-bars"></i>
             </div>

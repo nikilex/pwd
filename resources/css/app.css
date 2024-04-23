@@ -1,5 +1,15 @@
 .board-column {
-    width:280px
+    width: 272px;
+    border-radius: 12px;
+}
+
+.card-main {
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.card-main__body {
+    padding: 8px 12px 4px;
 }
 
 .card__description {
@@ -17,6 +27,14 @@
     top: 0;
     bottom: 0;
     margin: auto;
+}
+
+.card-title {
+    font-size: 14px;
+}
+
+.column__header h3 {
+    font-size: 14px;
 }
 
 .column__cards-wrapper {

@@ -147,7 +147,7 @@ export default {
 
         getComponentData() {
             return {
-                class: 'row col-auto flex-nowrap gap-3 overflow-scroll',
+                class: 'row col-auto flex-nowrap gap-1 overflow-scroll',
             }
         },
 

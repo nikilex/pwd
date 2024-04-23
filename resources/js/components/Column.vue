@@ -1,12 +1,12 @@
 <template>
-    <div class="column board-column h-auto bg-secondary p-3 rounded">
+    <div class="column board-column h-auto bg-secondary p-3">
         <div class="column__wrapper">
-            <div class="row g-0 flex-nowrap">
+            <div class="row g-0 flex-nowrap mb-2">
                 <div class="col-auto column__draggable me-1" style="cursor: pointer">
                     <i class="las la-bars"></i>
                 </div>
-                <div class="col column__header mb-2">
-                    <h3 v-if="!localColumn.titleEdit" @click="editTitle()">
+                <div class="col column__header">
+                    <h3 class="mb-0" v-if="!localColumn.titleEdit" @click="editTitle()">
                         {{ localColumn.title }}
                     </h3>
                     <div v-else class="input-group" v-click-outside="outsideTitle">
