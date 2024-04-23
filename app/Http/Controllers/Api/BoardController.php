@@ -84,7 +84,8 @@ class BoardController extends Controller
     public function transferCard(Request $request)
     {
         Card::where('id', $request->card_id)->update([
-            'column_id' => $request->column_id
+            'column_id' => $request->column_id,
+            'sort'      => 9999
         ]);
 
         $card = Card::find($request->card_id);

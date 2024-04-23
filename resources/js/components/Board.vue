@@ -64,6 +64,7 @@
 import BoardModal from './BoardModal.vue'
 import draggable from 'vuedraggable'
 import Column from './Column.vue'
+import { cloneDeep } from 'lodash'
 
 export default {
     name: 'Board',
@@ -159,8 +160,14 @@ export default {
             })
         },
 
-        cardTransfered() {
-            this.getColumns()
+        cardTransfered(val) {
+           let newColumnIndex = this.columns.findIndex((item) => item.id === val.newColumnId)
+
+           let oldColumnIndex = this.columns.findIndex((item) => item.id === val.oldColumnId)
+
+           this.columns[newColumnIndex].cards.push(val.card)
+
+           this.columns[oldColumnIndex].cards = this.columns[oldColumnIndex].cards.filter((item) => item.id !== val.card.id)
         },
 
         modalTitleEdited(newCard) {

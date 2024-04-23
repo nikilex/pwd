@@ -223,7 +223,7 @@ export default {
                     column_id: this.selectedColumn,
                 })
                 .then((res) => {
-                    this.$emit('cardTransfered', res.data)
+                    this.$emit('cardTransfered', { data: res.data, oldColumnId: this.card.column_id, newColumnId: this.selectedColumn, card: this.card })
                     this.loadingTransferCard = false
                 })
         },
