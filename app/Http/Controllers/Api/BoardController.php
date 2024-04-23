@@ -102,4 +102,10 @@ class BoardController extends Controller
     {
         return Column::upsert($request->columns, ['id'], ['sort']);
     }
+
+    public function archiveCard(Request $request)
+    {
+        $card = Card::find($request->card_id);
+        return $card->delete();
+    }
 }

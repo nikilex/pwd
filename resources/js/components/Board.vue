@@ -54,6 +54,7 @@
         <BoardModal
             @title-edited="modalTitleEdited"
             @cardTransfered="cardTransfered"
+            @cardArchived="cardArchived"
             :board-id="board.id"
             ref="modal"
         />
@@ -64,7 +65,6 @@
 import BoardModal from './BoardModal.vue'
 import draggable from 'vuedraggable'
 import Column from './Column.vue'
-import { cloneDeep } from 'lodash'
 
 export default {
     name: 'Board',
@@ -113,6 +113,11 @@ export default {
         localColumnChanged(val) {
             let index = this.columns.findIndex((item) => item.uuid === val.uuid)
             this.columns[index] = val
+        },
+
+        cardArchived(val) {
+            let index = this.columns.findIndex((item) => item.id === val.column_id)
+            this.columns[index].cards = this.columns[index].cards.filter((item) => item.id !== val.id)
         },
 
         cardDraggableStart() {

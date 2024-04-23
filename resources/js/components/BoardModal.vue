@@ -43,70 +43,104 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div
-                            v-if="!isEditableDescription"
-                            @click="editDescription"
-                            class="card__description border border-secondary p-2 rounded"
-                        >
-                            <div class="border" v-html="card.description" />
-                        </div>
-                        <div v-else class="row" v-click-outside="closeEditDescription">
-                            <div class="col-12">
-                                <ckeditor
-                                    v-model="editorText"
-                                    @ready="onReady"
-                                    @input="onChange"
-                                    :editor="editor"
-                                ></ckeditor>
-                                <!-- <textarea
+                        <div class="row">
+                            <div class="col-12 col-md-9">
+                                <div
+                                    v-if="!isEditableDescription"
+                                    @click="editDescription"
+                                    class="card__description border border-secondary p-2 rounded"
+                                >
+                                    <div class="border" v-html="card.description" />
+                                </div>
+                                <div v-else class="row" v-click-outside="closeEditDescription">
+                                    <div class="col-12">
+                                        <ckeditor
+                                            v-model="editorText"
+                                            @ready="onReady"
+                                            @input="onChange"
+                                            :editor="editor"
+                                        ></ckeditor>
+                                        <!-- <textarea
                                     v-model="card.description"
                                     class="form-control"
                                     placeholder="Добавьте описание"
                                     rows="3"
                                 ></textarea> -->
-                            </div>
-
-                            <div class="col-12 d-flex justify-content-end mt-2">
-                                <button
-                                    @click="saveDescription"
-                                    class="btn btn-outline-primary"
-                                    type="button"
-                                    :disabled="loadingSaveDescription"
-                                >
-                                    <div
-                                        v-if="loadingSaveDescription"
-                                        class="spinner-border spinner-border-sm text-primary"
-                                        role="status"
-                                    >
-                                        <span class="visually-hidden">Loading...</span>
                                     </div>
-                                    <i v-else class="la la-check nav-icon" />
-                                </button>
-                                <button @click="closeEditDescription" class="btn btn-outline-danger" type="button">
-                                    <i class="la la-close nav-icon" />
-                                </button>
+
+                                    <div class="col-12 d-flex justify-content-end mt-2">
+                                        <button
+                                            @click="saveDescription"
+                                            class="btn btn-outline-primary"
+                                            type="button"
+                                            :disabled="loadingSaveDescription"
+                                        >
+                                            <div
+                                                v-if="loadingSaveDescription"
+                                                class="spinner-border spinner-border-sm text-primary"
+                                                role="status"
+                                            >
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <i v-else class="la la-check nav-icon" />
+                                        </button>
+                                        <button
+                                            @click="closeEditDescription"
+                                            class="btn btn-outline-danger"
+                                            type="button"
+                                        >
+                                            <i class="la la-close nav-icon" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="row g-0">
+                                    <div class="col">
+                                        <select
+                                            v-model="selectedBoard"
+                                            class="form-select form-select-sm mb-2 rounded-2"
+                                        >
+                                            <option v-for="board in boards" :value="board.id" :key="board.id">
+                                                {{ board.title }}
+                                            </option>
+                                        </select>
+                                        <select
+                                            v-model="selectedColumn"
+                                            class="form-select form-select-sm mb-2 rounded-2"
+                                        >
+                                            <option v-for="column in columns" :value="column.id" :key="column.id">
+                                                {{ column.title }}
+                                            </option>
+                                        </select>
+                                        <button
+                                            @click="transferCard"
+                                            class="btn btn-outline-primary btn-sm w-100 mb-2 rounded-2"
+                                            type="button"
+                                        >
+                                            <div
+                                                v-if="loadingTransferCard"
+                                                class="spinner-border spinner-border-sm text-primary"
+                                                role="status"
+                                            >
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <template v-else>Перенести</template>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button
+                                            class="btn btn-sm btn-outline-primary w-100 rounded-2"
+                                            @click="archiveCard"
+                                        >
+                                            Архивировать
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <select v-model="selectedBoard" class="form-select form-select-sm">
-                            <option v-for="board in boards" :value="board.id" :key="board.id">{{ board.title }}</option>
-                        </select>
-                        <select v-model="selectedColumn" class="form-select form-select-sm">
-                            <option v-for="column in columns" :value="column.id" :key="column.id">
-                                {{ column.title }}
-                            </option>
-                        </select>
-                        <button @click="transferCard" class="btn btn-outline-primary" type="button">
-                            <div
-                                v-if="loadingTransferCard"
-                                class="spinner-border spinner-border-sm text-primary"
-                                role="status"
-                            >
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <template v-else>Перенести</template>
-                        </button>
                     </div>
                 </template>
             </div>
@@ -147,12 +181,14 @@ export default {
             loadingSaveDescription: false,
             loadingSaveTitle: false,
             loadingTransferCard: false,
+            loadingArchiveCard: false,
             loadingCard: false,
             isEditableTitle: false,
             selectedBoard: null,
             selectedColumn: null,
             boards: [],
             columns: [],
+            myModal: null,
         }
     },
 
@@ -175,6 +211,22 @@ export default {
             await this.getCard()
             await this.getColumns()
             this.loadingCard = false
+        },
+
+        archiveCard() {
+            this.loadingArchiveCard = true
+
+            return axios
+                .delete('/archiveCard', {
+                    data: {
+                        card_id: this.card.id,
+                    },
+                })
+                .then((res) => {
+                    this.$emit('cardArchived', this.card)
+                    this.closeModal()
+                })
+                .finally(() => this.loadingArchiveCard = false)
         },
 
         onReady(editor) {
@@ -223,7 +275,12 @@ export default {
                     column_id: this.selectedColumn,
                 })
                 .then((res) => {
-                    this.$emit('cardTransfered', { data: res.data, oldColumnId: this.card.column_id, newColumnId: this.selectedColumn, card: this.card })
+                    this.$emit('cardTransfered', {
+                        data: res.data,
+                        oldColumnId: this.card.column_id,
+                        newColumnId: this.selectedColumn,
+                        card: this.card,
+                    })
                     this.loadingTransferCard = false
                 })
         },
@@ -249,25 +306,25 @@ export default {
         },
 
         closeModal() {
-            const modal = document.getElementById('board-modal')
+            // const modal = document.getElementById('board-modal')
 
-            var myModal = new bootstrap.Modal(modal, {
-                keyboard: false,
-            })
+            // var myModal = new bootstrap.Modal(modal, {
+            //     keyboard: false,
+            // })
 
-            myModal.dispose()
-            myModal.detach()
+            this.myModal.hide()
+            this.myModal.dispose()
         },
 
         openModal() {
             const modal = document.getElementById('board-modal')
             document.body.appendChild(modal)
 
-            let myModal = new bootstrap.Modal(modal, {
+            this.myModal = new bootstrap.Modal(modal, {
                 keyboard: false,
             })
 
-            myModal.show()
+            this.myModal.show()
 
             this.loadCard()
         },
@@ -321,8 +378,9 @@ export default {
 }
 </script>
 
-<style> /* don't add "scoped"; note that this will also globalize the CSS for all editors in your project */
-    .ck-editor__editable {
-        min-height: 150px;
-    }
+<style>
+/* don't add "scoped"; note that this will also globalize the CSS for all editors in your project */
+.ck-editor__editable {
+    min-height: 150px;
+}
 </style>

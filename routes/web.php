@@ -27,6 +27,7 @@ Route::group([
     Route::get('/get-columns', [BoardController::class, 'getColumns']);
 
     Route::put('/transfer-card', [BoardController::class, 'transferCard']);
+    Route::delete('/archiveCard', [BoardController::class, 'archiveCard']);
 
     Route::put('/update-card-sort', [BoardController::class, 'updateSort']);
     Route::put('/update-column-sort', [BoardController::class, 'updateColumnSort']);
