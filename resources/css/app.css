@@ -41,3 +41,7 @@
     max-height: 80vh;
     overflow: scroll;
 }
+
+.c-pointer {
+    cursor: pointer
+}

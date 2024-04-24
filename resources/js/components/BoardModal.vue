@@ -202,7 +202,14 @@ export default {
         },
     },
 
-    mounted() {},
+    mounted() {
+        const modal = document.getElementById('board-modal')
+        document.body.appendChild(modal)
+
+        this.myModal = new bootstrap.Modal(modal, {
+            keyboard: false,
+        })
+    },
 
     methods: {
         async loadCard() {
@@ -226,7 +233,7 @@ export default {
                     this.$emit('cardArchived', this.card)
                     this.closeModal()
                 })
-                .finally(() => this.loadingArchiveCard = false)
+                .finally(() => (this.loadingArchiveCard = false))
         },
 
         onReady(editor) {
@@ -306,26 +313,12 @@ export default {
         },
 
         closeModal() {
-            // const modal = document.getElementById('board-modal')
-
-            // var myModal = new bootstrap.Modal(modal, {
-            //     keyboard: false,
-            // })
-
             this.myModal.hide()
             this.myModal.dispose()
         },
 
         openModal() {
-            const modal = document.getElementById('board-modal')
-            document.body.appendChild(modal)
-
-            this.myModal = new bootstrap.Modal(modal, {
-                keyboard: false,
-            })
-
             this.myModal.show()
-
             this.loadCard()
         },
 

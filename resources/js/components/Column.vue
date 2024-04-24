@@ -37,6 +37,21 @@
                         </button>
                     </div>
                 </div>
+                <div class="col-auto">
+                    <Popper>
+                        <div class="c-pointer">
+                            <i class="las la-ellipsis-h"></i>
+                        </div>
+
+                        <template #content>
+                            <ul class="list-group bg-light">
+                                <li class="list-group-item p-2">
+                                    <span @click="archiveColumn" class="text-danger c-pointer">Архивировать список</span>
+                                </li>
+                            </ul>
+                        </template>
+                    </Popper>
+                </div>
             </div>
             <div class="row column__cards-wrapper">
                 <div class="col-12">
@@ -80,6 +95,7 @@ import BoardModal from './BoardModal.vue'
 import draggable from 'vuedraggable'
 import Card from './cards/Card.vue'
 import { cloneDeep } from 'lodash'
+import Popper from 'vue3-popper'
 
 export default {
     name: 'Board',
@@ -88,6 +104,7 @@ export default {
         BoardModal,
         Card,
         draggable,
+        Popper,
     },
 
     props: {
@@ -105,7 +122,7 @@ export default {
             type: Boolean,
             required: false,
             default: false,
-        }
+        },
     },
 
     watch: {
@@ -126,6 +143,7 @@ export default {
             },
             columnTitleEdit: false,
             loadingChangeColumnTitle: false,
+            loadingArchiveColumn: false,
             drag: false,
         }
     },
@@ -137,6 +155,21 @@ export default {
     },
 
     methods: {
+        archiveColumn() {
+            this.loadingArchiveColumn = true
+
+            return axios
+                .delete('/archiveColumn', {
+                    data: {
+                        column_id: this.localColumn.id,
+                    },
+                })
+                .then((res) => {
+                    this.$emit('columnArchived', this.localColumn)
+                })
+                .finally(() => (this.loadingArchiveColumn = false))
+        },
+
         localCardChanged(val) {
             let index = this.localColumn.cards.findIndex((item) => item.uuid === val.uuid)
             this.localColumn.cards[index] = val

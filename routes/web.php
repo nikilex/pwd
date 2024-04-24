@@ -25,6 +25,7 @@ Route::group([
 
     Route::get('/get-boards', [BoardController::class, 'getBoards']);
     Route::get('/get-columns', [BoardController::class, 'getColumns']);
+    Route::delete('/archiveColumn', [BoardController::class, 'archiveColumn']);
 
     Route::put('/transfer-card', [BoardController::class, 'transferCard']);
     Route::delete('/archiveCard', [BoardController::class, 'archiveCard']);

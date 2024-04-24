@@ -41,6 +41,7 @@
                             @cardDraggableStart="cardDraggableStart"
                             @cardDraggableEnd="cardDraggableEnd"
                             @localColumnChanged="localColumnChanged"
+                            @columnArchived="columnArchived"
                             :board-id="board.id"
                             :column="element"
                             :card-drag-disabled="cardDraggableDisabled"
@@ -118,6 +119,11 @@ export default {
         cardArchived(val) {
             let index = this.columns.findIndex((item) => item.id === val.column_id)
             this.columns[index].cards = this.columns[index].cards.filter((item) => item.id !== val.id)
+        },
+
+        columnArchived(val) {
+            let index = this.columns.findIndex((item) => item.id === val.id)
+            this.columns.splice(index, 1)
         },
 
         cardDraggableStart() {

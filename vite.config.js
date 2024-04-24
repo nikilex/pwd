@@ -10,6 +10,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/sass/app.scss',
+                "/node_modules/@popperjs/core/dist/cjs/popper.js",
                 'resources/js/app.js',
             ],
             refresh: true,

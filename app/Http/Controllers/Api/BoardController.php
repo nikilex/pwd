@@ -108,4 +108,10 @@ class BoardController extends Controller
         $card = Card::find($request->card_id);
         return $card->delete();
     }
+
+    public function archiveColumn(Request $request)
+    {
+        $column = Column::find($request->column_id);
+        return $column->delete();
+    }
 }

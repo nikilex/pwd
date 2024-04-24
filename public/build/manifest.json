@@ -1,11 +1,17 @@
 {
+  "node_modules/@popperjs/core/dist/cjs/popper.js?commonjs-entry": {
+    "file": "assets/popper-zJTn1mEq.js",
+    "name": "popper",
+    "src": "node_modules/@popperjs/core/dist/cjs/popper.js?commonjs-entry",
+    "isEntry": true
+  },
   "resources/css/app.css": {
-    "file": "assets/app-CNgAajXA.css",
+    "file": "assets/app-CDRHVAbs.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-DGQzQBo5.js",
+    "file": "assets/app-CYQQIdRX.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
