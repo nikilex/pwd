@@ -314,7 +314,7 @@ export default {
 
         closeModal() {
             this.myModal.hide()
-            this.myModal.dispose()
+            //this.myModal.dispose()
         },
 
         openModal() {

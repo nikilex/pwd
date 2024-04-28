@@ -1,13 +1,32 @@
 <template>
-    <div class="container">
+    <div class="container mt-3">
         <div class="row justify-content-between">
             <div class="col-auto">
                 <h1 class="mb-4">{{ board.title }}</h1>
             </div>
             <div class="col-auto">
-                <h3 class="mb-3">
-                    <button @click="addColumn" class="btn btn-link text-light">+ Добавить колонку</button>
-                </h3>
+                <div class="row g-0 align-items-center">
+                    <div class="col-auto">
+                        <h3 class="mb-0">
+                            <button @click="addColumn" class="btn btn-link text-light">+ Добавить колонку</button>
+                        </h3>
+                    </div>
+                    <div class="col-auto">
+                        <Popper>
+                            <button class="btn btn-outline-primary">
+                                <i class="las la-ellipsis-h"></i>
+                            </button>
+
+                            <template #content>
+                                <ul class="list-group bg-light">
+                                    <li class="list-group-item p-2">
+                                        <span @click="openArchiveModal" class="text-danger c-pointer">Архив</span>
+                                    </li>
+                                </ul>
+                            </template>
+                        </Popper>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row flex-nowrap gap-3 g-0 overflow-scroll g-0">
@@ -59,21 +78,32 @@
             :board-id="board.id"
             ref="modal"
         />
+
+        <BoardArchiveModal
+            @unarchivedColumn="unarchivedColumn"
+            @unarchivedCard="unarchivedCard"
+            :board-id="board.id"
+            ref="modalArchive"
+        />
     </div>
 </template>
 
 <script>
 import BoardModal from './BoardModal.vue'
+import BoardArchiveModal from './BoardArchiveModal.vue'
 import draggable from 'vuedraggable'
 import Column from './Column.vue'
+import Popper from 'vue3-popper'
 
 export default {
     name: 'Board',
 
     components: {
         BoardModal,
+        BoardArchiveModal,
         Column,
         draggable,
+        Popper,
     },
 
     props: {
@@ -114,6 +144,23 @@ export default {
         localColumnChanged(val) {
             let index = this.columns.findIndex((item) => item.uuid === val.uuid)
             this.columns[index] = val
+        },
+
+        unarchivedColumn(column) {
+            column.uuid = Symbol('id')
+            this.columns = [...this.columns, column]
+            this.columnOrderChange()
+        },
+
+        unarchivedCard(card) {
+            card.uuid = Symbol('id')
+            let index = this.columns.findIndex((item) => item.id === card.column_id)
+            this.columns[index].cards = this.columns[index].cards || []
+            this.columns[index].cards = [...this.columns[index].cards, card]
+        },
+
+        openArchiveModal() {
+            this.$refs.modalArchive.openModal()
         },
 
         cardArchived(val) {
@@ -172,13 +219,15 @@ export default {
         },
 
         cardTransfered(val) {
-           let newColumnIndex = this.columns.findIndex((item) => item.id === val.newColumnId)
+            let newColumnIndex = this.columns.findIndex((item) => item.id === val.newColumnId)
 
-           let oldColumnIndex = this.columns.findIndex((item) => item.id === val.oldColumnId)
+            let oldColumnIndex = this.columns.findIndex((item) => item.id === val.oldColumnId)
 
-           this.columns[newColumnIndex].cards.push(val.card)
+            this.columns[newColumnIndex].cards.push(val.card)
 
-           this.columns[oldColumnIndex].cards = this.columns[oldColumnIndex].cards.filter((item) => item.id !== val.card.id)
+            this.columns[oldColumnIndex].cards = this.columns[oldColumnIndex].cards.filter(
+                (item) => item.id !== val.card.id,
+            )
         },
 
         modalTitleEdited(newCard) {
@@ -201,10 +250,10 @@ export default {
                 .then((res) => {
                     this.columns = res.data.map((column) => {
                         column.titleEdit = false
-                        column.uuid = Symbol("id")
+                        column.uuid = Symbol('id')
 
                         column.cards = column.cards.map((card) => {
-                            card.uuid = Symbol("id")
+                            card.uuid = Symbol('id')
                             card.titleEdit = false
                             return card
                         })

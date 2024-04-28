@@ -114,4 +114,26 @@ class BoardController extends Controller
         $column = Column::find($request->column_id);
         return $column->delete();
     }
+
+    public function getArchivedColumns(Request $request)
+    {
+        return Column::where('board_id', $request->board_id)->onlyTrashed()->get();
+    }
+
+    public function getArchivedCards(Request $request)
+    {
+        return Card::whereHas('column', function($q) use ($request) {
+            $q->where('board_id', $request->board_id);
+        })->onlyTrashed()->get();
+    }
+
+    public function unarchivedColumn(Request $request)
+    {
+        return Column::where('id', $request->column_id)->withTrashed()->update(['deleted_at' => NULL]);
+    }
+
+    public function unarchivedCard(Request $request)
+    {
+        return Card::where('id', $request->card_id)->withTrashed()->update(['deleted_at' => NULL]);
+    }
 }

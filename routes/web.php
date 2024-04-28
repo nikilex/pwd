@@ -24,11 +24,16 @@ Route::group([
     Route::get('/', [DashboardController::class, 'index'])->name('main');
 
     Route::get('/get-boards', [BoardController::class, 'getBoards']);
+
+    Route::get('/get-archived-columns', [BoardController::class, 'getArchivedColumns']);
     Route::get('/get-columns', [BoardController::class, 'getColumns']);
     Route::delete('/archiveColumn', [BoardController::class, 'archiveColumn']);
+    Route::put('/unarchived-column', [BoardController::class, 'unarchivedColumn']);
 
+    Route::get('/get-archived-cards', [BoardController::class, 'getArchivedCards']);
     Route::put('/transfer-card', [BoardController::class, 'transferCard']);
     Route::delete('/archiveCard', [BoardController::class, 'archiveCard']);
+    Route::put('/unarchived-card', [BoardController::class, 'unarchivedCard']);
 
     Route::put('/update-card-sort', [BoardController::class, 'updateSort']);
     Route::put('/update-column-sort', [BoardController::class, 'updateColumnSort']);
