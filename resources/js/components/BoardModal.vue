@@ -200,6 +200,14 @@ export default {
                 }
             },
         },
+
+        selectedBoard: {
+            handler: function () {
+                if (this.card.id) {
+                    this.getColumns()
+                }
+            },
+        },
     },
 
     mounted() {
@@ -216,7 +224,7 @@ export default {
             this.loadingCard = true
             await this.getBoards()
             await this.getCard()
-            await this.getColumns()
+            // await this.getColumns()
             this.loadingCard = false
         },
 
@@ -288,7 +296,12 @@ export default {
                         newColumnId: this.selectedColumn,
                         card: this.card,
                     })
+
                     this.loadingTransferCard = false
+
+                    if (this.selectedBoard !== this.boardId) {
+                        this.closeModal()
+                    }
                 })
         },
 
@@ -319,7 +332,7 @@ export default {
 
         openModal() {
             this.myModal.show()
-            this.loadCard()
+            // this.loadCard()
         },
 
         saveDescription() {

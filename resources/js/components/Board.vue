@@ -223,7 +223,9 @@ export default {
 
             let oldColumnIndex = this.columns.findIndex((item) => item.id === val.oldColumnId)
 
-            this.columns[newColumnIndex].cards.push(val.card)
+            if(this.columns[newColumnIndex]) {
+                this.columns[newColumnIndex].cards.push(val.card)
+            }
 
             this.columns[oldColumnIndex].cards = this.columns[oldColumnIndex].cards.filter(
                 (item) => item.id !== val.card.id,
