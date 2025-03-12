@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-3">
+    <div class="container-fluid mt-3">
         <div class="row justify-content-between">
             <div class="col-auto">
                 <h1 class="mb-4">{{ board.title }}</h1>
